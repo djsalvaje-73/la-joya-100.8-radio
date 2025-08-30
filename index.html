@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RADIO ESTACION LA JOYA 100.8</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      background-color: black;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      position: fixed;
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://i.ibb.co/zWq5wmvB/background.jpg');
+      background-size: cover;
+      background-position: center;
+      animation: zoomPan 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes zoomPan {
+      0% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.1) translateY(5%); }
+      100% { transform: scale(1) translateY(0); }
+    }
+
+    .overlay-image {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+      color: white;
+      text-align: center;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1rem;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.5);
+      gap: 8px;
+      border-radius: 20px;
+    }
+
+    .live-badge {
+      background: red;
+      color: white;
+      font-weight: bold;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+
+    .logo {
+      width: 220px;
+      margin: 20px 0;
+    }
+
+    .info h2 {
+      font-size: 1.4rem;
+      font-weight: normal;
+    }
+
+    .info p {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    .player-controls {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .disc {
+      border: 8px solid #001f4d;
+      background-color: #FFD700;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .disc img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .play-btn {
+      position: absolute;
+      bottom: 0;
+      left: 18%;
+      transform: translateY(50%);
+      background: #FFD700;
+      border: 8px solid #001f4d;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: white;
+      z-index: 2;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+
+    .rotating-logo {
+      animation: spin 6s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .equalizer {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 30px;
+      margin: 15px 0;
+      gap: 4px;
+    }
+
+    .equalizer .bar {
+      width: 4px;
+      background: #FFD700;
+      animation: bounce 1s infinite ease-in-out;
+    }
+
+    .equalizer .bar:nth-child(1) { height: 20px; animation-delay: 0s; }
+    .equalizer .bar:nth-child(2) { height: 15px; animation-delay: 0.1s; }
+    .equalizer .bar:nth-child(3) { height: 25px; animation-delay: 0.2s; }
+    .equalizer .bar:nth-child(4) { height: 10px; animation-delay: 0.3s; }
+    .equalizer .bar:nth-child(5) { height: 18px; animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(2.2); }
+    }
+
+    .pause-icon, .play-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pause-bar {
+      width: 8px;
+      height: 35px;
+      background: white;
+      margin: 0 4px;
+      border-radius: 2px;
+    }
+
+    .play-triangle {
+      width: 0;
+      height: 0;
+      border-left: 25px solid white;
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+    }
+
+    /* Redes sociales centradas */
+    .social-horizontal {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .social-horizontal a {
+      display: inline-flex;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 6px rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .social-horizontal a img {
+      width: 24px;
+      height: 24px;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.6));
+    }
+
+    /* Menú hamburguesa responsive */
+    .menu-toggle {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 10001;
+      cursor: pointer;
+      width: 30px;
+      height: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .menu-toggle span {
+      height: 4px;
+      width: 100%;
+      background: #FFD700;
+      border-radius: 2px;
+    }
+
+    .menu {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 200px;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      padding-top: 60px;
+      transition: left 0.3s ease;
+      z-index: 10000;
+    }
+
+    .menu.open {
+      left: 0;
+    }
+
+    .menu ul {
+      list-style: none;
+      padding: 0 20px;
+    }
+
+    .menu ul li {
+      margin: 20px 0;
+    }
+
+    .menu ul li a {
+      color: #FFD700;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .menu ul li a:hover {
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .logo { width: 160px; }
+      .disc { width: 140px; height: 140px; }
+      .play-btn { width: 60px; height: 60px; font-size: 28px; border-width: 6px; left: 50%; transform: translate(-50%, 50%); }
+    }
+  </style>
+</head>
+<body>
+  <audio id="radio-player" preload="none" src="https://stream.zeno.fm/0qcicikypnruv"></audio>
+
+  <div class="background"></div>
+  <img class="overlay-image" src="https://i.ibb.co/zWq5wmvB/background.jpg" alt="Overlay"/>
+
+  <div class="content">
+    <div class="top-bar">
+      <span>REPRODUCIENDO</span>
+      <span class="live-badge">EN VIVO</span>
+    </div>
+
+    <img class="logo" src="https://i.ibb.co/xKY4XkFw/la-joya-100-8.jpg" alt="Logo Radio"/>
+
+    <div class="info">
+      <div class="equalizer">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <h2>la joya 100.8</h2>
+      <p id="track-info">Cargando canción...</p>
+    </div>
+
+    <div class="player-controls">
+      <div class="disc">
+        <img class="rotating-logo" src="https://i.ibb.co/rRSPtNrZ/Presentaci-n14.jpg" alt="Logo en Disco"/>
+      </div>
+      <div class="play-btn" id="play-toggle">
+        <div class="pause-icon" style="display: none;">
+          <div class="pause-bar"></div><div class="pause-bar"></div>
+        </div>
+        <div class="play-icon">
+          <div class="play-triangle"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Redes sociales centradas -->
+    <div class="social-horizontal">
+      <a href="https://www.facebook.com/p/La-JoYa-1008-Radio-100067664173024/" target="_blank" title="Facebook">
+        <img src="https://i.postimg.cc/JtS4C0pk/facebook.png" alt="Facebook" />
+      </a>
+      <a href="https://www.instagram.com/lajoya100.8/" target="_blank" title="Instagram">
+        <img src="https://i.postimg.cc/4YQJc5s6/instagram.png" alt="Instagram" />
+      </a>
+      <a href="https://www.instagram.com/lajoya100.8/" target="_blank" title="TikTok">
+        <img src="https://i.postimg.cc/cvSx6jy1/tiktok.png" alt="TikTok" />
+      </a>
+      <a href="https://x.com/100_joya" target="_blank" title="WhatsApp">
+        <img src="https://i.postimg.cc/B8h4Yn8t/whatsapp.png" alt="WhatsApp" />
+      </a>
+      <a href="https://djsalvaje.blogspot.com/" target="_blank" title="YouTube">
+        <img src="https://i.postimg.cc/B8ZJBKnd/youtube.png" alt="YouTube" />
+      </a>
+    </div>
+  </div>
+
+  <!-- Botón hamburguesa -->
+  <div class="menu-toggle" id="menu-toggle">
+    <span></span><span></span><span></span>
+  </div>
+
+  <!-- Menú lateral -->
+  <nav class="menu" id="menu">
+    <ul>
+      <li><a href="#"inicio">Inicio</a></li>
+      <li><a href="https://djsalvaje.blogspot.com/"en-vivo">Sitio web</a></li>
+      <li><a href="https://x.com/100_joya"contacto">Contacto</a></li>
+      <li><a href="#"redes">Redes Sociales</a></li>
+    </ul>
+  </nav>
+
+  <script>
+    const playBtn = document.getElementById("play-toggle");
+    const player = document.getElementById("radio-player");
+    const pauseIcon = document.querySelector(".pause-icon");
+    const playIcon = document.querySelector(".play-icon");
+
+    playBtn.addEventListener("click", () => {
+      if (player.paused) {
+        player.play();
+        playIcon.style.display = "none";
+        pauseIcon.style.display = "flex";
+      } else {
+        player.pause();
+        pauseIcon.style.display = "none";
+        playIcon.style.display = "flex";
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      player.play().then(() => {
+        playIcon.style.display = "none";
+        pauseIcon.style.display = "flex";
+      }).catch(() => {
+        console.warn("Autoplay bloqueado por el navegador.");
+      });
+    });
+
+    // Menú hamburguesa
+    const menuToggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('menu');
+
+    menuToggle.addEventListener('click', () => {
+      menu.classList.toggle('open');
+    });
+
+    // Track info
+    window.addEventListener("load", function () {
+      const output = document.getElementById("track-info");
+      try {
+        const source = new EventSource("https://api.zeno.fm/mounts/metadata/subscribe/0qcicikypnruv");
+        source.onmessage = function(event) {
+          try {
+            const data = JSON.parse(event.data);
+            output.textContent = data.streamTitle || "🎧 Sin título";
+          } catch {
+            output.textContent = event.data;
+          }
+        };
+        source.onerror = () => {
+          output.textContent = "Sin conexión con API Zeno";
+        };
+      } catch {
+        output.textContent = "EventSource no soportado";
+      }
+    });
+  </script>
+</body>
+</html>
